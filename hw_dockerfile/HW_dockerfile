@@ -1,0 +1,8 @@
+FROM debian:11
+LABEL maintainer="Treenut Yusufee" email="zignut1035@gmail.com"
+RUN apt-get update &&\
+    apt-get install -y python3 python3-pip &&\ 
+    pip3 install jupyterlab &&\
+    rm -rf /var/lib/apt/lists/*
+EXPOSE 8888
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root"]

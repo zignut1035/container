@@ -1,0 +1,39 @@
+version: '3'
+services:
+  ros-noetic:
+    image: osrf/ros:noetic-desktop-full
+    command: roscore
+    networks:
+      - ros-network
+
+  melodic-publisher:
+    image: osrf/ros:melodic-desktop-full
+    command:
+      - bash
+      - -c
+      - |
+        source /opt/ros/melodic/setup.bash
+        roscore &
+        sleep 5
+        rostopic pub /chatter std_msgs/String 'hello world' --rate 0.2
+    networks:
+      - ros-network
+    depends_on:
+      - ros-noetic
+
+
+
+  kinetic-listener:
+    image: osrf/ros:kinetic-desktop-full
+    command: rostopic echo /chatter
+    networks:
+      - ros-network
+    depends_on:
+      - ros-noetic
+      - melodic-publisher
+
+networks:
+  ros-network:
+    driver: bridge
+
+
